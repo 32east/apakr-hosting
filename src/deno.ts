@@ -8,6 +8,7 @@ import { DsDDB } from 'https://deno.land/x/dsddb@v2.1.0/mod.ts';
 import { configDotenv } from 'npm:dotenv';
 
 const KVStore = new DsDDB<ArrayBuffer>();
+const EmptyArrayBuffer = new ArrayBuffer(0);
 
 const KV = {
 	get: async function (Key: string, _Type: 'arrayBuffer'): Promise<ArrayBuffer | undefined> {
@@ -16,6 +17,9 @@ const KV = {
 	put: async function (Key: string, Content: ArrayBuffer): Promise<void> {
 		KVStore.set(Key, Content);
 	},
+	delete: function(Key: string) {
+		this.put(Key, EmptyArrayBuffer);
+	}
 };
 
 type Bindings = {
